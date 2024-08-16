@@ -1,0 +1,95 @@
+﻿@model FileUpload_Honeywell.ViewModels.UploadFileCreateViewModel
+@{
+    var filepath ="";
+    
+    if (Model!= null)
+    {
+         filepath = "/images/" + Model.FileDetails[0].FileName;
+    }
+   
+
+}
+<form enctype="multipart/form-data" asp-controller="home" asp-action="create" method="post">
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <input asp-for="UploadFiles" multiple class="form-control custom-file-input">
+            
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <input type="submit" class="btn btn-primary m-1" value="Upload" />
+        </div>
+    </div>
+    <div>
+        <div>
+            @if (Model != null)
+            {
+
+                foreach (var file in Model.FileDetails)
+                {
+
+                    if (Model.Isselected == true && Model.Id == file.Id)
+                    {
+                        filepath = "/images/" + file.FileName;
+                        <video width="320" height="240" asp-append-version="true" autoplay >
+
+                            @*<source src="~/images/Muladhar_x264.mp4" type="video/mp4">*@
+                            <source src="@filepath" type="video/mp4">
+
+                        </video>
+                        break;
+                    }
+                    else if (Model.Id == 0)
+                    {
+                        <video width="320" height="240" asp-append-version="true" autoplay>                            
+                            <source src="@filepath" type="video/mp4">
+                        </video>
+                    break;
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <table class="table-responsive" border="1">
+            <thead>
+                <tr>
+                    <th>
+                        File Name
+                    </th>
+                    <th>
+                        File Size
+                    </th>
+                   
+                </tr>
+             
+            </thead>
+            <tbody>
+                @if(Model!= null)
+                {               
+                
+                foreach(var file in Model.FileDetails)
+                {
+                       
+                        <tr>
+                        <td>
+                                
+                                <a asp-controller="home" asp-action="edit" asp-route-id="@file.Id" >@file.FileName</a>
+                            
+                        </td>
+                        <td>
+                            @file.FileSize
+                        </td>
+                     
+                    </tr>
+                }
+             }
+               
+               
+            </tbody>
+        </table>
+    </div>
+  
+</form>
